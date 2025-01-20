@@ -4,6 +4,7 @@ import { Postagem } from "../entities/postagem.entity";
 import { DeleteResult, ILike, Repository } from "typeorm";
 import { Tema } from "../../tema/entities/tema.entity";
 import { TemaService } from "../../tema/services/tema.service";
+import { UsuarioService } from "../../usuario/services/usuario.service";
 
 @Injectable()
 export class PostagemService{
@@ -11,13 +12,15 @@ export class PostagemService{
     constructor(
         @InjectRepository(Postagem)
         private postagemRepository: Repository<Postagem>,
-        private temaService: TemaService
+        private temaService: TemaService,
+        private usuarioService: UsuarioService
     ){}
 
     async findAll(): Promise<Postagem[]>{
         return this.postagemRepository.find({
             relations: {
-                tema: true
+                tema: true,
+                usuario: true
             }
         }); //SELECT*FROM tb_postagens;
     }
@@ -30,7 +33,8 @@ export class PostagemService{
                 id
             },
             relations: {
-                tema: true
+                tema: true,
+                usuario: true
             }
         })
 
@@ -46,7 +50,8 @@ export class PostagemService{
                 titulo: ILike(`%${titulo}%`)
             },
             relations: {
-                tema: true
+                tema: true,
+                usuario:true
             }
         }); 
     }
